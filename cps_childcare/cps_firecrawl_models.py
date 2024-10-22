@@ -65,8 +65,9 @@ class ChildcareOpenAIResponse(BaseModel):
 class ChildcareOpenAIRecord(SQLModel, ChildcareOpenAIResponse, table=True):
     id: int | None = Field(default=None, primary_key=True)
     school_id: int
-    school_type: str
     page_url: str
+    before_care_quote_snippet_verified: bool | None
+    after_care_quote_snippet_verified: bool | None
 
     openai_model_name: str
     prompt_version: str | None = Field(default="v1")
@@ -97,7 +98,6 @@ class CombinedChildcareOpenAIResponse(BaseModel):
 class CombinedChildcareOpenAIRecord(SQLModel, CombinedChildcareOpenAIResponse, table=True):
     id: int | None = Field(default=None, primary_key=True)
     school_id: int
-    school_type: str
     page_url: str
     before_care_citations: str | None
     before_care_citation_snippets: str | None
@@ -120,4 +120,4 @@ class CombinedChildcareOpenAIRecord(SQLModel, CombinedChildcareOpenAIResponse, t
         return json.dumps([snippet.model_dump() for snippet in snippets])
 
 # alembic revision --autogenerate -m "init"
-# alembic upgrade head
+# alembic upgrade headg
