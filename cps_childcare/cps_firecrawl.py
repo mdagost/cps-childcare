@@ -53,6 +53,7 @@ fc = FirecrawlApp(api_key=os.environ["FIRECRAWL_API_KEY"])
 schools = get_all_records(AIRTABLE_BASE_ID, AIRTABLE_RAW_TABLE_NAME, airtable_api_key)
 
 # don't do schools we've already crawled
+
 completed_schools = get_completed_school_ids()
 schools = [s for s in schools if s["fields"]["School_ID"] not in completed_schools]
 

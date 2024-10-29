@@ -98,7 +98,6 @@ class CombinedChildcareOpenAIResponse(BaseModel):
 class CombinedChildcareOpenAIRecord(SQLModel, CombinedChildcareOpenAIResponse, table=True):
     id: int | None = Field(default=None, primary_key=True)
     school_id: int
-    page_url: str
     before_care_citations: str | None
     before_care_citation_snippets: str | None
     after_care_citations: str | None
@@ -109,15 +108,10 @@ class CombinedChildcareOpenAIRecord(SQLModel, CombinedChildcareOpenAIResponse, t
     created_at: datetime = Field(default_factory=partial(datetime.now, timezone.utc))
 
     # SQLite can't store lists so transform to json
-    @field_validator("before_care_citations", "after_care_citations", mode="before")
-    def list_to_json(cls, list_obj: list[int] | None) -> str | None:
+    @field_validator("before_care_citations", "after_care_citations",
+                     "before_care_citation_snippets", "after_care_citation_snippets",mode="before")
+    def list_to_json(cls, list_obj: list | None) -> str | None:
         return json.dumps(list_obj) if list_obj is not None else None
 
-    @field_validator("before_care_citation_snippets", "after_care_citation_snippets", mode="before")
-    def snippets_to_json(cls, snippets: list[CitationSnippet] | None) -> str | None:
-        if snippets is None:
-            return None
-        return json.dumps([snippet.model_dump() for snippet in snippets])
-
 # alembic revision --autogenerate -m "init"
-# alembic upgrade headg
+# alembic upgrade head

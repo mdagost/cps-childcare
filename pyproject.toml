@@ -21,6 +21,13 @@ tenacity = "^8.5.0"
 tiktoken = "^0.7.0"
 ipykernel = "^6.29.5"
 
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "^4.2.5"
+shapely = "^2.0.6"
+folium = "^0.18.0"
+streamlit = "^1.39.0"
+streamlit-folium = "^0.23.1"
+
 [build-system]
 requires = ["poetry-core>=1.5.0"]
 build-backend = "poetry.core.masonry.api"

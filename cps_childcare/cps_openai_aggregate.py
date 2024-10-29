@@ -1,4 +1,5 @@
 import os
+from textwrap import dedent
 
 from openai import OpenAI
 from sqlalchemy import text
@@ -42,10 +43,14 @@ def extract_care_page_details(client, page: CrawlerRecord, model="gpt-4o-mini", 
     return ChildcareOpenAIResponse.model_validate_json(completion.choices[0].message.content)
 
 
-def combine_care_page_details(client, school_id, model="gpt-4o-mini", prompt_version="v1"):
+def combine_care_page_details(client, school_id, model="gpt-4o-mini", prompt_version="v2"):
     school_pages = get_all_school_extracted_pages(school_id)
+    school_pages = list(filter(is_current_page, school_pages))
 
-    prompt_v1 = """
+    if len(school_pages) == 0:
+        return None
+
+    prompt_v2 = """
     Here is a numbered list of json objects extracted from webpages about a single elementary school.  Use the
     information to synthesize a single, high quality overview of the school's before and after school child care program.
     - Prefer pages where the "before_care_quote_snippet_verified" and "after_care_quote_snippet_verified" fields are True over ones where they are False.
@@ -65,12 +70,12 @@ def combine_care_page_details(client, school_id, model="gpt-4o-mini", prompt_ver
     citation_after_care_snippets = []
     for num, page in enumerate(school_pages):
         context_dict = {field: getattr(page, field) for field in context_fields}
-        context += f"[{num}] {context_dict}"
+        context += f"[{num}] {context_dict}\n\n"
         citation_urls.append(page.page_url)
         citation_before_care_snippets.append(page.before_care_quote_snippet)
         citation_after_care_snippets.append(page.after_care_quote_snippet)
 
-    full_prompt = prompt_v1 + context + "\n\n## Answer:"
+    full_prompt = dedent(prompt_v2) + context + "\n\n## Answer:"
 
     completion = client.beta.chat.completions.parse(
             model=model,
@@ -78,6 +83,7 @@ def combine_care_page_details(client, school_id, model="gpt-4o-mini", prompt_ver
                 {"role": "system", "content": "You are an AI expert tasked with understanding elementary and high school websites."},
                 {"role": "user", "content": full_prompt}
             ],
+            #temperature=0.0,
             response_format=CombinedChildcareOpenAIResponse
         )
 
@@ -87,6 +93,7 @@ def combine_care_page_details(client, school_id, model="gpt-4o-mini", prompt_ver
     # instead of trusting what gpt returns here (we trust the numbers though)
     response.before_care_citation_snippets = []
     response.after_care_citation_snippets = []
+
     if response.before_care_citations:
         for before_care_citation in response.before_care_citations:
             response.before_care_citation_snippets.append(
@@ -141,31 +148,57 @@ def get_pages_to_extract():
 
 
 # get the schools we haven't combined yet
-def get_schools_to_combine():
+def get_schools_to_combine(prompt_version="v2"):
     with Session(engine) as session:
         query = select(ChildcareOpenAIRecord.school_id).distinct()
         result = session.exec(query)
         all_schools = result.fetchall()
 
-        query = select(CombinedChildcareOpenAIRecord.school_id).distinct()
+        query = (select(CombinedChildcareOpenAIRecord.school_id)
+                 .where(CombinedChildcareOpenAIRecord.prompt_version == prompt_version)
+                ).distinct()
         result = session.exec(query)
         combined_schools = result.fetchall()
 
-    all_schools = set(school[0] for school in all_schools)
-    combined_schools = set(school[0] for school in combined_schools)
-    schools_remaining = all_schools.difference(combined_schools)
+    schools_remaining = set(all_schools).difference(set(combined_schools))
 
     return schools_remaining
 
 
 def get_all_school_extracted_pages(school_id):
     with Session(engine) as session:
-        query = select(ChildcareOpenAIRecord).where(ChildcareOpenAIRecord.school_id == school_id)
+        query = (select(ChildcareOpenAIRecord)
+                 .where(ChildcareOpenAIRecord.school_id == school_id)
+                 .where((ChildcareOpenAIRecord.provides_before_care == True) |
+                        (ChildcareOpenAIRecord.provides_after_care == True)))
         result = session.exec(query)
         pages = result.fetchall()
         pages = [ChildcareOpenAIRecord.model_validate(page) for page in pages]
 
     return pages
+
+
+# returns true if the page is from the current school year
+def is_current_page(page: ChildcareOpenAIRecord) -> bool:
+    # our default is that it's current
+    if page.webpage_year is None:
+        return True
+
+    OLD_YEARS = ["08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"]
+    YEAR_PATTERNS_0 = [f"20{y}" for y in OLD_YEARS]
+    YEAR_PATTERNS_1 = [f"20{y1}-20{y2}" for y1, y2 in zip(OLD_YEARS, OLD_YEARS[1:])]
+    YEAR_PATTERNS_2 = [f"20{y1}/20{y2}" for y1, y2 in zip(OLD_YEARS, OLD_YEARS[1:])]
+    YEAR_PATTERNS_3 = [f"20{y1}-{y2}" for y1, y2 in zip(OLD_YEARS, OLD_YEARS[1:])]
+    YEAR_PATTERNS_4 = [f"20{y1}/{y2}" for y1, y2 in zip(OLD_YEARS, OLD_YEARS[1:])]
+    YEAR_PATTERNS_5 = ["2018-2020"]
+    YEAR_PATTERNS = YEAR_PATTERNS_0 + YEAR_PATTERNS_1 + YEAR_PATTERNS_2 + YEAR_PATTERNS_3 + YEAR_PATTERNS_4 + YEAR_PATTERNS_5
+
+    # replace spaces and "en dashes" with normal dashes
+    webpage_year = page.webpage_year.replace(" ", "").replace("–", "-")
+    for pattern in YEAR_PATTERNS:
+        if webpage_year == pattern:
+            return False
+    return True
 
 
 client = OpenAI(api_key=os.getenv("CPS_OPENAI_API_KEY"))
@@ -209,13 +242,17 @@ for page_num, page in enumerate(pages):
 
 
 school_ids = get_schools_to_combine()
-print(f"Combining data for {len(schools)} schools...")
+print(f"Combining data for {len(school_ids)} schools...")
 
 MODEL = "gpt-4o-mini"
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"
 
 for num, school_id in enumerate(school_ids):
     combined = combine_care_page_details(client, school_id, model=MODEL, prompt_version=PROMPT_VERSION)
+
+    if combined is None:
+        print(f"No pages to combine for school {school_id}")
+        continue
 
     result = {
         "school_id": school_id,
