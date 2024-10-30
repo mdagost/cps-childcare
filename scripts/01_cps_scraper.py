@@ -152,5 +152,5 @@ if __name__ == "__main__":
         time.sleep(uniform(1, 5))
 
     # dump the final results to csv
-    pd.concat([schools, pd.DataFrame(profile_data)], axis=1).to_csv("../data/cps_schools_contacts.csv")
+    pd.concat([schools, pd.DataFrame(profile_data)], axis=1).to_csv("data/cps_schools_contacts.csv")
 

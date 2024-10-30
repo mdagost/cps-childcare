@@ -10,7 +10,7 @@ AIRTABLE_BASE_ID = "appPfxeoBduSJLC67"
 AIRTABLE_CHILDCARE_TABLE_NAME = "tblsiTlNXf5uzZF6c"
 AIRTABLE_API_KEY = os.environ["AIRTABLE_API_KEY"]
 # downloaded from https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Community-Areas-current-/cauq-8yn6
-NEIGHBORHOOD_FILE = "./data/Boundaries - Community Areas (current).geojson"
+NEIGHBORHOOD_FILE = "data/Boundaries - Community Areas (current).geojson"
 
 
 def get_neighborhood(lat, lon, geojson):
