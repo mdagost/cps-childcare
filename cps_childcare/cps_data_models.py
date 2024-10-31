@@ -113,5 +113,29 @@ class CombinedChildcareOpenAIRecord(SQLModel, CombinedChildcareOpenAIResponse, t
     def list_to_json(cls, list_obj: list | None) -> str | None:
         return json.dumps(list_obj) if list_obj is not None else None
 
+
+class SchoolToNeighborhood(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    created_at: datetime = Field(default_factory=partial(datetime.now, timezone.utc))
+    school_id: int
+    school_name: str
+    neighborhood: str
+
+
+class Neighborhood(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    created_at: datetime = Field(default_factory=partial(datetime.now, timezone.utc))
+    neighborhood: str
+    student_count: int | None
+    low_income_student_count: int | None
+    low_income_student_pct: float | None
+    black_student_count: int | None
+    black_student_pct: float | None
+    hispanic_student_count: int | None
+    hispanic_student_pct: float | None
+    white_student_count: int | None
+    white_student_pct: float | None
+
+
 # alembic revision --autogenerate -m "init"
 # alembic upgrade head

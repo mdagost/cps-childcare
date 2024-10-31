@@ -2,7 +2,7 @@ import os
 
 from sqlmodel import select, Session
 
-from cps_childcare.cps_firecrawl_models import CombinedChildcareOpenAIRecord
+from cps_childcare.cps_data_models import CombinedChildcareOpenAIRecord
 from cps_childcare.utils import update_record
 from cps_childcare.database import engine
 

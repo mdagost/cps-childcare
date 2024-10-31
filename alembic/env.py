@@ -6,7 +6,7 @@ from sqlmodel import SQLModel
 
 from alembic import context
 
-from cps_childcare.cps_firecrawl_models import CrawlerRecord, CrawlerOpenAIRecord, ChildcareOpenAIRecord, CombinedChildcareOpenAIRecord
+from cps_childcare.cps_data_models import CrawlerRecord, CrawlerOpenAIRecord, ChildcareOpenAIRecord, CombinedChildcareOpenAIRecord
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

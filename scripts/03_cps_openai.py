@@ -9,7 +9,7 @@ from sqlalchemy import text
 from sqlmodel import select, Session
 from tenacity import retry, retry_if_not_exception_type, stop_after_attempt, wait_random_exponential
 
-from cps_childcare.cps_firecrawl_models import CrawlerRecord, CrawlerOpenAIRecord, CrawlerOpenAIResponse
+from cps_childcare.cps_data_models import CrawlerRecord, CrawlerOpenAIRecord, CrawlerOpenAIResponse
 from cps_childcare.database import engine
 
 
