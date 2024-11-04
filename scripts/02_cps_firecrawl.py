@@ -5,9 +5,9 @@ import random
 from firecrawl.firecrawl import FirecrawlApp
 from sqlmodel import select, Session
 
-from cps_firecrawl_models import CrawlerRecord
-from database import engine
-from utils import get_all_records
+from cps_childcare.cps_data_models import CrawlerRecord
+from cps_childcare.database import engine
+from cps_childcare.utils import get_all_records
 
 
 def bulk_insert_crawler_records(records):

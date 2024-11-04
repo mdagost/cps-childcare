@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicago Schools</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search schools...">
+            <select id="filter-region">
+                <option value="">Filter by neighborhood...</option>
+            </select>
+            <select id="filter-before-care">
+                <option value="">Filter by before care...</option>
+                <option value="True">Has before care</option>
+                <option value="False">No before care</option>
+            </select>
+            <select id="filter-after-care">
+                <option value="">Filter by after care...</option>
+                <option value="True">Has after care</option>
+                <option value="False">No after care</option>
+            </select>
+        </div>
+        
+        <div class="content">
+            <div class="table-container">
+                <table id="schools-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="school">Elementary School</th>
+                            <th data-sort="address">Address</th>
+                            <th data-sort="neighborhood">Neighborhood</th>
+                            <th data-sort="schoolHours">School Hours</th>
+                            <th data-sort="earliestDropOff">Earliest Drop Off Time</th>
+                            <th data-sort="afterSchoolHours">After School Hours</th>
+                            <th data-sort="grades">Grades</th>
+                            <th data-sort="phone">Phone</th>
+                            <th data-sort="website">Website</th>
+                            <th data-sort="contactPage">Contact Page</th>
+                            <th data-sort="beforeCare">Provides Before Care</th>
+                            <th data-sort="afterCare">Provides After Care</th>
+                            <th data-sort="beforeCareStart">Before Care Start Time</th>
+                            <th data-sort="beforeCareProvider">Before Care Provider</th>
+                            <th data-sort="afterCareEnd">After Care End Time</th>
+                            <th data-sort="afterCareProvider">After Care Provider</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        Made with ❤️ in Chicago by Grumble Labs.
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,7 +1,7 @@
 # pyright: reportMissingImports=false
 from sqlmodel import SQLModel, create_engine
 
-from cps_childcare.cps_firecrawl_models import (CrawlerRecord, CrawlerOpenAIRecord,
+from cps_childcare.cps_data_models import (CrawlerRecord, CrawlerOpenAIRecord,
                                                 ChildcareOpenAIRecord, CombinedChildcareOpenAIRecord)
 
 sqlite_file_name = "/Users/mdagostino/cps-childcare/data/cps_crawler.db"

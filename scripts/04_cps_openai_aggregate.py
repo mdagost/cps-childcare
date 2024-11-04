@@ -5,7 +5,7 @@ from openai import OpenAI
 from sqlalchemy import text
 from sqlmodel import select, Session
 
-from cps_childcare.cps_firecrawl_models import (ChildcareOpenAIRecord, ChildcareOpenAIResponse,
+from cps_childcare.cps_data_models import (ChildcareOpenAIRecord, ChildcareOpenAIResponse,
     CitationSnippet, CombinedChildcareOpenAIRecord, CombinedChildcareOpenAIResponse, CrawlerRecord)
 from cps_childcare.database import engine
 

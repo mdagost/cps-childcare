@@ -37,6 +37,7 @@ def get_school_profile_data(school_id):
     This URL comes from visiting a school profile page like https://www.cps.edu/schools/schoolprofiles/400052
     and then looking at the activity in the network tab of chrome devtools.
     It's got some useful info (but NOT the email address), BUT it does have the shool's website URL.
+    It appears to be the API endpoint documented here: https://api.cps.edu/schoolprofile/Help/Api/GET-CPS-SingleSchoolProfile_SchoolID
     """
     CPS_SCHOOL_PROFILE_API_BASE = "https://www.cps.edu/api/schoolprofile/singleschoolprofile?SchoolID="
     
@@ -115,7 +116,9 @@ if __name__ == "__main__":
 
         if school_profile_data is not None:
             keys_to_print = ["schoolHours", "afterSchoolHours", "earliestDropOffTime",
-                            "phone", "gradesOffered", "websiteURL"]
+                            "phone", "gradesOffered", "websiteURL",
+                            "isTitle1Eligible", "studentCount", "studentCountLowIncome",
+                            "studentCountBlack", "studentCountHispanic", "studentCountWhite"]
             print(f"Index = {idx}")
             for key_to_print in keys_to_print:
                 value = school_profile_data[key_to_print]
@@ -149,5 +152,5 @@ if __name__ == "__main__":
         time.sleep(uniform(1, 5))
 
     # dump the final results to csv
-    pd.concat([schools, pd.DataFrame(profile_data)], axis=1).to_csv("./data/cps_schools_contacts.csv")
+    pd.concat([schools, pd.DataFrame(profile_data)], axis=1).to_csv("data/cps_schools_contacts.csv")
 
