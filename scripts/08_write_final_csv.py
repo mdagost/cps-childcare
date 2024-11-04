@@ -40,4 +40,13 @@ data["lat"] = data["latlon"].apply(lambda latlong: latlong.split(",")[0] if latl
 data["lon"] = data["latlon"].apply(lambda latlong: latlong.split(",")[1] if latlong else None)
 data = data.drop(columns=["latlon"])
 
-data.to_csv("data/final_childcare_dataset.csv", index=False)
+data = data.sort_values("Elementary School")
+
+data.to_csv("data/final_childcare_dataset.csv", 
+          index=False,              # Don't write row numbers
+          quoting=1,               # Quote all non-numeric fields (csv.QUOTE_ALL)
+          quotechar='"',           # Use double quotes
+          encoding='utf-8',        # Use UTF-8 encoding
+          na_rep='',              # Empty string for NA/NaN values
+          date_format='%Y-%m-%d'   # ISO format for dates if any
+)
