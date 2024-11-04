@@ -13,6 +13,8 @@ AIRTABLE_API_KEY = os.environ["AIRTABLE_API_KEY"]
 schools = get_all_records(AIRTABLE_BASE_ID, AIRTABLE_CHILDCARE_TABLE_NAME, AIRTABLE_API_KEY)
 data = pd.DataFrame([school["fields"] for school in schools])
 
+data = data[data.Type.isin(["Elementary School", "ElementaryCharter"])]
+
 columns_name_map = {
     "Name": "Elementary School",
     "Address": "Address",
