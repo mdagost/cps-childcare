@@ -13,7 +13,7 @@ function initMap() {
 // Fetch and process CSV data
 async function fetchData() {
     try {
-        const response = await fetch('https://raw.githubusercontent.com/mdagost/cps-childcare/refs/heads/changes/data/final_childcare_dataset.csv');
+        const response = await fetch('https://raw.githubusercontent.com/mdagost/cps-childcare/refs/heads/main/data/final_childcare_dataset.csv');
         const text = await response.text();
         
         // Use Papa Parse to parse CSV
