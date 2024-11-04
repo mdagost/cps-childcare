@@ -40,6 +40,9 @@ data["lat"] = data["latlon"].apply(lambda latlong: latlong.split(",")[0] if latl
 data["lon"] = data["latlon"].apply(lambda latlong: latlong.split(",")[1] if latlong else None)
 data = data.drop(columns=["latlon"])
 
+data["Phone"] = data["Phone"].apply(lambda phone: phone.replace(")", ") ") if phone else None)
+data["Grades"] = data["Grades"].apply(lambda grades: grades[0] if grades else None)
+
 data = data.sort_values("Elementary School")
 
 data.to_csv("data/final_childcare_dataset.csv", 

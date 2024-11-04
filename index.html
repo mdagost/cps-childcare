@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chicago Schools</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://vercel.com/font/geist-sans/style.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container">
+        <h1 class="page-title">Chicago Public Schools Before and After Care</h1>
+        <div class="subtitle">Made with ❤️ in Chicago by Grumble Labs</div>
         <div class="controls">
             <input type="text" id="search" placeholder="Search schools...">
             <select id="filter-region">
@@ -34,6 +37,12 @@
                             <th data-sort="school">Elementary School</th>
                             <th data-sort="address">Address</th>
                             <th data-sort="neighborhood">Neighborhood</th>
+                            <th data-sort="beforeCare">Provides Before Care</th>
+                            <th data-sort="afterCare">Provides After Care</th>
+                            <th data-sort="beforeCareStart">Before Care Start Time</th>
+                            <th data-sort="beforeCareProvider">Before Care Provider</th>
+                            <th data-sort="afterCareEnd">After Care End Time</th>
+                            <th data-sort="afterCareProvider">After Care Provider</th>
                             <th data-sort="schoolHours">School Hours</th>
                             <th data-sort="earliestDropOff">Earliest Drop Off Time</th>
                             <th data-sort="afterSchoolHours">After School Hours</th>
@@ -41,12 +50,6 @@
                             <th data-sort="phone">Phone</th>
                             <th data-sort="website">Website</th>
                             <th data-sort="contactPage">Contact Page</th>
-                            <th data-sort="beforeCare">Provides Before Care</th>
-                            <th data-sort="afterCare">Provides After Care</th>
-                            <th data-sort="beforeCareStart">Before Care Start Time</th>
-                            <th data-sort="beforeCareProvider">Before Care Provider</th>
-                            <th data-sort="afterCareEnd">After Care End Time</th>
-                            <th data-sort="afterCareProvider">After Care Provider</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -55,10 +58,6 @@
             <div id="map"></div>
         </div>
     </div>
-
-    <footer class="footer">
-        Made with ❤️ in Chicago by Grumble Labs.
-    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>

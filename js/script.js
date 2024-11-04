@@ -50,6 +50,12 @@ function renderTable(data) {
             <td>${row['Elementary School']}</td>
             <td>${row['Address']}</td>
             <td>${row['Neighborhood']}</td>
+            <td style="color: green; text-align: center">${row['Provides Before Care'] === 'True' ? '✓' : ''}</td>
+            <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
+            <td>${row['Before Care Start Time']}</td>
+            <td>${row['Before Care Provider']}</td>
+            <td>${row['After Care End Time']}</td>
+            <td>${row['After Care Provider']}</td>
             <td>${row['School Hours']}</td>
             <td>${row['Earliest Drop Off Time']}</td>
             <td>${row['After School Hours']}</td>
@@ -57,12 +63,6 @@ function renderTable(data) {
             <td>${row['Phone']}</td>
             <td>${row['Website'] ? `<a href="${row['Website']}" target="_blank">Website</a>` : ''}</td>
             <td>${row['Contact Page'] ? `<a href="${row['Contact Page']}" target="_blank">Contact</a>` : ''}</td>
-            <td style="color: green; text-align: center">${row['Provides Before Care'] === 'True' ? '✓' : ''}</td>
-            <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
-            <td>${row['Before Care Start Time']}</td>
-            <td>${row['Before Care Provider']}</td>
-            <td>${row['After Care End Time']}</td>
-            <td>${row['After Care Provider']}</td>
         </tr>
     `).join('');
 }
