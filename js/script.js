@@ -54,10 +54,12 @@ function renderTable(data) {
             <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
             <td>${row['Before Care Start Time']}</td>
             <td>${row['Before Care Provider']}</td>
-            <td>${row['Before Care Sources'] || ''}</td>
+            <td data-sources>${(row['Before Care Sources'] || '').split('[').map((item, index) => 
+                index === 0 ? item : `[${item}`).join('<br>')}</td>
             <td>${row['After Care End Time']}</td>
             <td>${row['After Care Provider']}</td>
-            <td>${row['After Care Sources'] || ''}</td>
+            <td data-sources>${(row['After Care Sources'] || '').split('[').map((item, index) => 
+                index === 0 ? item : `[${item}`).join('<br>')}</td>
             <td>${row['School Hours']}</td>
             <td>${row['Earliest Drop Off Time']}</td>
             <td>${row['After School Hours']}</td>

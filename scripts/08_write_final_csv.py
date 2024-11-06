@@ -58,7 +58,7 @@ def format_citations(citations):
         
         citation_str = ""
         for num, citation in enumerate(citations):
-            link = f"[{num+1}] <a href='{citation['url']}'>{citation['snippet']}</a>"
+            link = f"<a href='{citation['url']}'>[{num+1}]</a>{citation['snippet']}"
             citation_str += link + "\n"
         
         return citation_str

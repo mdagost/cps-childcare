@@ -158,3 +158,9 @@ tr:hover {
         border-radius: 0;
     }
 }
+
+/* Add styling for the sources cells to respect newlines */
+td[data-sources] {
+    white-space: pre-line;
+    max-width: 300px; /* Prevent cells from getting too wide */
+}
