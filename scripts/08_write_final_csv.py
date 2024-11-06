@@ -31,10 +31,10 @@ columns_name_map = {
     "provides_after_care": "Provides After Care",
     "before_care_start_time": "Before Care Start Time",
     "before_care_provider": "Before Care Provider",
-    "before_care_citation_snippets": "Before Care Sources",
+    "before_care_citation_snippets": "Before Care Info",
     "after_care_end_time": "After Care End Time",
     "after_care_provider": "After Care Provider",
-    "after_care_citation_snippets": "After Care Sources",
+    "after_care_citation_snippets": "After Care Info",
     "google_maps_coordinates": "latlon"
 }
 
@@ -65,8 +65,8 @@ def format_citations(citations):
     
     return ""
 
-data["Before Care Sources"] = data["Before Care Sources"].apply(lambda citations: format_citations(citations))
-data["After Care Sources"] = data["After Care Sources"].apply(lambda citations: format_citations(citations))
+data["Before Care Info"] = data["Before Care Info"].apply(lambda citations: format_citations(citations))
+data["After Care Info"] = data["After Care Info"].apply(lambda citations: format_citations(citations))
 
 data = data.sort_values("Elementary School")
 

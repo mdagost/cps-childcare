@@ -45,7 +45,24 @@ async function fetchData() {
 // Render table with data
 function renderTable(data) {
     const tbody = document.querySelector('#schools-table tbody');
-    tbody.innerHTML = data.map(row => `
+    tbody.innerHTML = data.map(row => {
+        // Function to process sources with citations
+        const processSourcesWithCitations = (sources) => {
+            if (!sources) return '';
+            const entries = sources.split('\n').filter(entry => entry.trim());
+            return entries.map(entry => {
+                // Extract the link part
+                const linkMatch = entry.match(/<a.*?<\/a>/);
+                if (linkMatch) {
+                    // Get the text before the link
+                    const textPart = entry.replace(linkMatch[0], '').trim();
+                    return textPart + ' ' + linkMatch[0];
+                }
+                return entry;
+            }).join('<br>');
+        };
+
+        return `
         <tr>
             <td>${row['Elementary School']}</td>
             <td>${row['Address']}</td>
@@ -54,12 +71,10 @@ function renderTable(data) {
             <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
             <td>${row['Before Care Start Time']}</td>
             <td>${row['Before Care Provider']}</td>
-            <td data-sources>${(row['Before Care Sources'] || '').split('[').map((item, index) => 
-                index === 0 ? item : `[${item}`).join('<br>')}</td>
+            <td data-sources>${processSourcesWithCitations(row['Before Care Info'])}</td>
             <td>${row['After Care End Time']}</td>
             <td>${row['After Care Provider']}</td>
-            <td data-sources>${(row['After Care Sources'] || '').split('[').map((item, index) => 
-                index === 0 ? item : `[${item}`).join('<br>')}</td>
+            <td data-sources>${processSourcesWithCitations(row['After Care Info'])}</td>
             <td>${row['School Hours']}</td>
             <td>${row['Earliest Drop Off Time']}</td>
             <td>${row['After School Hours']}</td>
@@ -68,7 +83,7 @@ function renderTable(data) {
             <td>${row['Website'] ? `<a href="${row['Website']}" target="_blank">Website</a>` : ''}</td>
             <td>${row['Contact Page'] ? `<a href="${row['Contact Page']}" target="_blank">Contact</a>` : ''}</td>
         </tr>
-    `).join('');
+    `}).join('');
 }
 
 // Add this helper function to scroll to a specific school row
@@ -188,10 +203,10 @@ function sortData(data, column, direction) {
         'afterCare': 'Provides After Care',
         'beforeCareStart': 'Before Care Start Time',
         'beforeCareProvider': 'Before Care Provider',
-        'beforeCareSources': 'Before Care Sources',
+        'beforeCareInfo': 'Before Care Info',
         'afterCareEnd': 'After Care End Time',
         'afterCareProvider': 'After Care Provider',
-        'afterCareSources': 'After Care Sources'
+        'afterCareInfo': 'After Care Info'
     };
 
     const actualColumn = columnMap[column] || column;
