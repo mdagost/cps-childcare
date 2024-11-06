@@ -54,8 +54,10 @@ function renderTable(data) {
             <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
             <td>${row['Before Care Start Time']}</td>
             <td>${row['Before Care Provider']}</td>
+            <td>${row['Before Care Sources'] || ''}</td>
             <td>${row['After Care End Time']}</td>
             <td>${row['After Care Provider']}</td>
+            <td>${row['After Care Sources'] || ''}</td>
             <td>${row['School Hours']}</td>
             <td>${row['Earliest Drop Off Time']}</td>
             <td>${row['After School Hours']}</td>
@@ -67,7 +69,25 @@ function renderTable(data) {
     `).join('');
 }
 
-// Add markers to map
+// Add this helper function to scroll to a specific school row
+function scrollToSchool(schoolName) {
+    const tbody = document.querySelector('#schools-table tbody');
+    const rows = tbody.getElementsByTagName('tr');
+    
+    for (let i = 0; i < rows.length; i++) {
+        const schoolCell = rows[i].cells[0];  // First cell contains school name
+        if (schoolCell.textContent === schoolName) {
+            rows[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            rows[i].style.backgroundColor = '#fff3cd';  // Highlight the row
+            setTimeout(() => {
+                rows[i].style.backgroundColor = '';  // Remove highlight after 2 seconds
+            }, 2000);
+            break;
+        }
+    }
+}
+
+// Update the addMarkersToMap function
 function addMarkersToMap(data) {
     // Clear existing markers
     markers.forEach(marker => map.removeLayer(marker));
@@ -100,6 +120,12 @@ function addMarkersToMap(data) {
                     ${school['Phone'] ? `Phone: ${school['Phone']}<br>` : ''}
                     ${school['Website'] ? `<a href="${school['Website']}" target="_blank">Website</a>` : ''}
                 `);
+            
+            // Add click handler to scroll to the school's row
+            marker.on('click', () => {
+                scrollToSchool(school['Elementary School']);
+            });
+            
             markers.push(marker);
             marker.addTo(map);
         }
@@ -160,8 +186,10 @@ function sortData(data, column, direction) {
         'afterCare': 'Provides After Care',
         'beforeCareStart': 'Before Care Start Time',
         'beforeCareProvider': 'Before Care Provider',
+        'beforeCareSources': 'Before Care Sources',
         'afterCareEnd': 'After Care End Time',
-        'afterCareProvider': 'After Care Provider'
+        'afterCareProvider': 'After Care Provider',
+        'afterCareSources': 'After Care Sources'
     };
 
     const actualColumn = columnMap[column] || column;

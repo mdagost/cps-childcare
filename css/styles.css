@@ -103,6 +103,11 @@ th {
     cursor: pointer;
     position: sticky;
     top: 0;
+    border-right: 1px solid white;
+}
+
+th:last-child {
+    border-right: none;
 }
 
 th:hover {

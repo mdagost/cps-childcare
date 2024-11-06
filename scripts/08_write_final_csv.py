@@ -1,3 +1,4 @@
+import json
 import os
 
 import pandas as pd
@@ -30,8 +31,10 @@ columns_name_map = {
     "provides_after_care": "Provides After Care",
     "before_care_start_time": "Before Care Start Time",
     "before_care_provider": "Before Care Provider",
+    "before_care_citation_snippets": "Before Care Sources",
     "after_care_end_time": "After Care End Time",
     "after_care_provider": "After Care Provider",
+    "after_care_citation_snippets": "After Care Sources",
     "google_maps_coordinates": "latlon"
 }
 
@@ -44,6 +47,26 @@ data = data.drop(columns=["latlon"])
 
 data["Phone"] = data["Phone"].apply(lambda phone: phone.replace(")", ") ") if phone else None)
 data["Grades"] = data["Grades"].apply(lambda grades: grades[0] if grades else None)
+
+# handle the citations
+def format_citations(citations):
+    if citations:
+        try:
+            citations = json.loads(citations)
+        except TypeError:
+            return ""
+        
+        citation_str = ""
+        for num, citation in enumerate(citations):
+            link = f"[{num+1}] <a href='{citation['url']}'>{citation['snippet']}</a>"
+            citation_str += link + "\n"
+        
+        return citation_str
+    
+    return ""
+
+data["Before Care Sources"] = data["Before Care Sources"].apply(lambda citations: format_citations(citations))
+data["After Care Sources"] = data["After Care Sources"].apply(lambda citations: format_citations(citations))
 
 data = data.sort_values("Elementary School")
 
