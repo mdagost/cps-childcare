@@ -46,6 +46,19 @@ async function fetchData() {
 function renderTable(data) {
     const tbody = document.querySelector('#schools-table tbody');
     tbody.innerHTML = data.map(row => {
+        // Create a temporary div to parse HTML and preserve link attributes
+        const processHtml = (html) => {
+            if (!html) return '';
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            // Find all links and ensure they have the correct attributes
+            div.querySelectorAll('a').forEach(a => {
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener noreferrer');
+            });
+            return div.innerHTML;
+        };
+
         return `
         <tr>
             <td>${row['Elementary School']}</td>
@@ -55,17 +68,17 @@ function renderTable(data) {
             <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
             <td>${row['Before Care Start Time']}</td>
             <td>${row['Before Care Provider']}</td>
-            <td data-sources>${row['Before Care Info'] || ''}</td>
+            <td data-sources>${processHtml(row['Before Care Info'])}</td>
             <td>${row['After Care End Time']}</td>
             <td>${row['After Care Provider']}</td>
-            <td data-sources>${row['After Care Info'] || ''}</td>
+            <td data-sources>${processHtml(row['After Care Info'])}</td>
             <td>${row['School Hours']}</td>
             <td>${row['Earliest Drop Off Time']}</td>
             <td>${row['After School Hours']}</td>
             <td>${row['Grades']}</td>
             <td>${row['Phone']}</td>
-            <td>${row['Website'] ? `<a href="${row['Website']}" target="_blank">Website</a>` : ''}</td>
-            <td>${row['Contact Page'] ? `<a href="${row['Contact Page']}" target="_blank">Contact</a>` : ''}</td>
+            <td>${row['Website'] ? `<a href="${row['Website']}" target="_blank" rel="noopener noreferrer">Website</a>` : ''}</td>
+            <td>${row['Contact Page'] ? `<a href="${row['Contact Page']}" target="_blank" rel="noopener noreferrer">Contact</a>` : ''}</td>
         </tr>
     `}).join('');
 }

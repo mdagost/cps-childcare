@@ -67,7 +67,7 @@ body {
     flex-direction: column;
     gap: 20px;
     height: calc(100vh - 200px);
-    min-height: 500px;
+    min-height: 1000px;
     margin-bottom: 20px;
 }
 
@@ -83,7 +83,7 @@ body {
     overflow-y: auto;
     border: 1px solid #ccc;
     border-radius: 8px;
-    min-height: 300px;
+    min-height: 600px;
 }
 
 table {
@@ -95,6 +95,7 @@ th, td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    vertical-align: top;
 }
 
 th {
