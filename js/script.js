@@ -46,22 +46,6 @@ async function fetchData() {
 function renderTable(data) {
     const tbody = document.querySelector('#schools-table tbody');
     tbody.innerHTML = data.map(row => {
-        // Function to process sources with citations
-        const processSourcesWithCitations = (sources) => {
-            if (!sources) return '';
-            const entries = sources.split('\n').filter(entry => entry.trim());
-            return entries.map(entry => {
-                // Extract the link part
-                const linkMatch = entry.match(/<a.*?<\/a>/);
-                if (linkMatch) {
-                    // Get the text before the link
-                    const textPart = entry.replace(linkMatch[0], '').trim();
-                    return textPart + ' ' + linkMatch[0];
-                }
-                return entry;
-            }).join('<br>');
-        };
-
         return `
         <tr>
             <td>${row['Elementary School']}</td>
@@ -71,10 +55,10 @@ function renderTable(data) {
             <td style="color: green; text-align: center">${row['Provides After Care'] === 'True' ? '✓' : ''}</td>
             <td>${row['Before Care Start Time']}</td>
             <td>${row['Before Care Provider']}</td>
-            <td data-sources>${processSourcesWithCitations(row['Before Care Info'])}</td>
+            <td data-sources>${row['Before Care Info'] || ''}</td>
             <td>${row['After Care End Time']}</td>
             <td>${row['After Care Provider']}</td>
-            <td data-sources>${processSourcesWithCitations(row['After Care Info'])}</td>
+            <td data-sources>${row['After Care Info'] || ''}</td>
             <td>${row['School Hours']}</td>
             <td>${row['Earliest Drop Off Time']}</td>
             <td>${row['After School Hours']}</td>
