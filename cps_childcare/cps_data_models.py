@@ -2,8 +2,12 @@ import json
 from datetime import datetime, timezone
 from functools import partial
 
+from lancedb.pydantic import LanceModel, Vector
 from pydantic import BaseModel, field_validator
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, LargeBinary, SQLModel
+from sqlalchemy import text
+from sqlalchemy.engine import Engine
+import numpy as np
 
 
 class CrawlerRecord(SQLModel, table=True):
@@ -136,6 +140,13 @@ class Neighborhood(SQLModel, table=True):
     white_student_count: int | None
     white_student_pct: float | None
 
+
+class WebPageChunk(LanceModel):
+    id: str
+    school_id: int
+    page_url: str
+    chunk_text: str
+    chunk_embedding: Vector(768)
 
 # alembic revision --autogenerate -m "init"
 # alembic upgrade head

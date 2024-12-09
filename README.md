@@ -4,7 +4,7 @@ There does not exist a centralized dataset of before care and after care program
 
 This project uses data scraping, web crawling, and LLM's to remedy that problem.
 
-If you don't want the ~1 GB SQLite database, clone this repo with `GIT_LFS_SKIP_SMUDGE=1 git clone...`  To get the SQLite database itself, first install [git-lfs](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) and then, after cloning this repo, run `git lfs pull`.
+If you don't want the ~1 GB SQLite database and the ~1.5 GB LanceDB vector database, clone this repo with `GIT_LFS_SKIP_SMUDGE=1 git clone...`  To get the SQLite database itself, first install [git-lfs](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) and then, after cloning this repo, run `git lfs pull`.
 
 ## Installation
 
@@ -24,3 +24,5 @@ These are the scripts to run:
 5. `scripts/05_update_childcare_airtable.py`  Updates the childcare Airtable table with the aggregated info from the previous step.
 6. `scripts/06_append_neighborhood_to_airtable.py` Uses a geojson file of Chicago neighborhoods to append the neighborhood name to each school in our childcare Airtable table.
 7. `scripts/07_update_school_demos_airtable.py`  Updates the raw data Airtable table with school-level demographic data that came from re-running Step 1.  Updates the childcare Airtable table with aggregated demographics.
+8. `scripts/08_write_final_csv.py`  Writes the final csv that the webapp uses.
+9. `scripts/09_chunk_and_embed.py`  `llama-index` code for chunking, embedding, and LanceDB storage of the embeddings for RAG.
